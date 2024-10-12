@@ -1,0 +1,83 @@
+#include <iostream>
+using namespace std;
+
+struct Envio {
+    int id;
+    string destinatario;
+    string codigoSeguimiento;
+    int prioridad;
+    string destino;
+};
+
+void registrarEnvios(Envio* envios, int cantidad) {
+    for (int i = 0; i < cantidad; i++) {
+        cout << "Registro de Envio #" << i + 1 << endl;
+        (envios + i)->id = i + 1;
+        cout << "Nombre del destinatario: ";
+        cin >> (envios + i)->destinatario;
+        cout << "Código de seguimiento: ";
+        cin >> (envios + i)->codigoSeguimiento;
+        cout << "Prioridad (1-Alta, 2-Media, 3-Baja): ";
+        cin >> (envios + i)->prioridad;
+        cout << "Destino (Nacional o Internacional): ";
+        cin >> (envios + i)->destino;
+    }
+}
+
+void mostrarEnvios(Envio* envios, int cantidad) {
+    cout << "\nListado de envíos:\n";
+    for (int i = 0; i < cantidad; i++) {
+        cout << "Envio #" << (envios + i)->id
+             << " - Destinatario: " << (envios + i)->destinatario
+             << " - Código: " << (envios + i)->codigoSeguimiento
+             << " - Prioridad: " << (envios + i)->prioridad
+             << " - Destino: " << (envios + i)->destino << endl;
+    }
+}
+
+void ordenarEnviosPorDestino(Envio* envios, int cantidad) {
+    for (int i = 0; i < cantidad - 1; i++) {
+        for (int j = 0; j < cantidad - i - 1; j++) {
+            if ((envios + j)->destino > (envios + j + 1)->destino) {
+                Envio temp = *(envios + j);
+                *(envios + j) = *(envios + j + 1);
+                *(envios + j + 1) = temp;
+            }
+        }
+    }
+}
+
+void ordenarEnviosPorPrioridad(Envio* envios, int cantidad) {
+    for (int i = 0; i < cantidad - 1; i++) {
+        for (int j = 0; j < cantidad - i - 1; j++) {
+            if ((envios + j)->prioridad > (envios + j + 1)->prioridad) {
+                Envio temp = *(envios + j);
+                *(envios + j) = *(envios + j + 1);
+                *(envios + j + 1) = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int cantidad;
+    cout << "Ingrese la cantidad de envíos a registrar: ";
+    cin >> cantidad;
+
+    Envio* envios = new Envio[cantidad];  
+
+    registrarEnvios(envios, cantidad);
+    mostrarEnvios(envios, cantidad);
+    
+    cout << "\nOrdenando envíos por destino...\n";
+    ordenarEnviosPorDestino(envios, cantidad);
+    mostrarEnvios(envios, cantidad);
+
+    cout << "\nOrdenando envíos por prioridad...\n";
+    ordenarEnviosPorPrioridad(envios, cantidad);
+    mostrarEnvios(envios, cantidad);
+
+    delete[] envios;  
+
+    return 0;
+}
